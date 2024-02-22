@@ -2,16 +2,28 @@ node(){
   try{
 
     /* Récupération du dépôt git applicatif */
-    stage('Git checkout'){
-      git branch: 'main',
-      credentialsId: 'jenkinsgitlabssh',
-      url: "git@github.com:naqa92/microservice_test.git"
-    }
-
-    stage('Echo test') {
-            echo 'Ceci est un test dans Jenkinsfile.'
+    stage('Git Checkout'){
+        steps {
+            git branch: 'main',
+            credentialsId: 'jenkinsgithub',
+            url :'git@github.com:naqa92/microservice_test.git'
         }
-
+    }
+    stage("Compile") {
+        steps {
+        sh "./gradlew compileJava"
+        }
+    }
+    stage("Test") {
+        steps {
+        sh "./gradlew test"
+        }
+    }
+    stage("Package") {
+        steps {
+        sh "./gradlew build"
+        }
+    }
   } finally {
     cleanWs()
   }
