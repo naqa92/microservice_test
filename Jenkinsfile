@@ -5,7 +5,7 @@ node(){
     stage('Git Checkout'){
         steps {
             git branch: 'main',
-            url :'git@github.com:naqa92/microservice_test.git'
+            url :'https://github.com/naqa92/microservice_test.git'
         }
     }
     stage("Compile") {
