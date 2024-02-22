@@ -1,9 +1,19 @@
-FROM ubuntu
-RUN apt-get update -y
-RUN apt-get install wget -y
-RUN wget https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.deb
-RUN apt-get -qqy install ./jdk-17_linux-x64_bin.deb -y
-RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-17/bin/java 1717
-#copie du jar dans l'image docker fgggggggggggg
-COPY build/libs/calculator1-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+FROM openjdk:17.0.1-jdk-slim as build
+
+WORKDIR /app
+
+COPY build.gradle settings.gradle gradlew ./
+COPY gradle ./gradle
+COPY src ./src
+
+RUN ./gradlew clean build
+
+FROM openjdk:17.0.1-jdk-slim
+
+RUN adduser --system --group app-user
+
+COPY --from=build --chown=app-user:app-user /app/build/libs/calculator1-0.0.1-SNAPSHOT.jar calculator.jar
+
+EXPOSE 8080
+USER app-user
+CMD ["java", "-jar", "calculator.jar"]
