@@ -5,6 +5,7 @@ node(){
     stage('Git Checkout'){
         steps {
             git branch: 'main',
+            credentialsId: 'jenkinsgithubcom',
             url :'https://github.com/naqa92/microservice_test.git'
         }
     }
