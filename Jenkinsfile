@@ -6,7 +6,7 @@ node(){
         steps {
             git branch: 'main',
             credentialsId: 'jenkinsgithub',
-            url :'https://github.com/naqa92/microservice_test.git'
+            url :'git@github.com:naqa92/microservice_test.git'
         }
     }
     stage("Compile") {
